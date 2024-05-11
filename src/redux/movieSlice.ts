@@ -37,6 +37,21 @@ export const fetchMoviesBySearchAsync = createAsyncThunk<
   }
 });
 
+export const fetchMovieAsync = createAsyncThunk<
+  Movie,
+  number,
+  { rejectValue: string }
+>("movie/fetchMovie", async (id, thunkAPI) => {
+  try {
+    const response = await axios.get(
+      `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=en-US`
+    );
+    return response.data.results;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue("Failed to fetch movies");
+  }
+});
+
 const initialState: initialStateType = {
   topMovies: [],
   currentMovie: null,
@@ -72,6 +87,18 @@ const movieSlice = createSlice({
         state.fetchedMovies = action.payload;
       })
       .addCase(fetchMoviesBySearchAsync.rejected, (state, action) => {
+        state.status = "rejected";
+        state.error = action.payload as string;
+      })
+      .addCase(fetchMovieAsync.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchMovieAsync.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.currentMovie = action.payload;
+      })
+      .addCase(fetchMovieAsync.rejected, (state, action) => {
         state.status = "rejected";
         state.error = action.payload as string;
       });

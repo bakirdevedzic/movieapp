@@ -38,6 +38,21 @@ export const fetchShowsBySearchAsync = createAsyncThunk<
   }
 });
 
+export const fetchShowAsync = createAsyncThunk<
+  Show,
+  number,
+  { rejectValue: string }
+>("movie/fetchShow", async (id, thunkAPI) => {
+  try {
+    const response = await axios.get(
+      `https://api.themoviedb.org/3/tv/${id}?api_key=${API_KEY}`
+    );
+    return response.data.results;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue("Failed to fetch show");
+  }
+});
+
 const initialState: initialStateType = {
   topShows: [],
   currentShow: null,
@@ -73,6 +88,18 @@ const showSlice = createSlice({
         state.fetchedShows = action.payload;
       })
       .addCase(fetchShowsBySearchAsync.rejected, (state, action) => {
+        state.status = "rejected";
+        state.error = action.payload as string;
+      })
+      .addCase(fetchShowAsync.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchShowAsync.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.currentShow = action.payload;
+      })
+      .addCase(fetchShowAsync.rejected, (state, action) => {
         state.status = "rejected";
         state.error = action.payload as string;
       });
