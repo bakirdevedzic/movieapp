@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import movieSlice from "./redux/movieSlice";
 import showSlice from "./redux/showSlice";
+import searchSlice from "./redux/searchSlice";
 
 const store = configureStore({
   reducer: {
     movie: movieSlice,
     show: showSlice,
+    search: searchSlice,
   },
 });
 

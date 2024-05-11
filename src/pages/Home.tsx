@@ -92,7 +92,10 @@ function Home() {
           search.length < 3 &&
           tab === "show" &&
           topShows.map((show: any) => (
-            <div className="bg-red-400 h-[100px] w-[500px] flex justify-center items-center">
+            <div
+              className="bg-red-400 h-[100px] w-[500px] flex justify-center items-center"
+              onClick={() => navigate(`/show/${show.id}`)}
+            >
               {show.name}
             </div>
           ))}

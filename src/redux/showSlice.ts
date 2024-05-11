@@ -47,7 +47,7 @@ export const fetchShowAsync = createAsyncThunk<
     const response = await axios.get(
       `https://api.themoviedb.org/3/tv/${id}?api_key=${API_KEY}`
     );
-    return response.data.results;
+    return response.data;
   } catch (error: any) {
     return thunkAPI.rejectWithValue("Failed to fetch show");
   }

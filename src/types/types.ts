@@ -27,3 +27,8 @@ export type initialShowType = {
 export type FethchTopShowsResponse = {
   resutls: Show[];
 };
+
+export type initialStateShowType = {
+  search: string;
+  tab: "show" | "movie";
+};

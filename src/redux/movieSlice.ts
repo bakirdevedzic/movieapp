@@ -46,7 +46,8 @@ export const fetchMovieAsync = createAsyncThunk<
     const response = await axios.get(
       `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=en-US`
     );
-    return response.data.results;
+
+    return response.data;
   } catch (error: any) {
     return thunkAPI.rejectWithValue("Failed to fetch movies");
   }
@@ -97,6 +98,7 @@ const movieSlice = createSlice({
       .addCase(fetchMovieAsync.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.currentMovie = action.payload;
+        console.log(action.payload);
       })
       .addCase(fetchMovieAsync.rejected, (state, action) => {
         state.status = "rejected";
