@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
-  FetchTopMoviesResponse,
   Movie,
   initialMovieStateType as initialStateType,
 } from "../types/types";
@@ -14,8 +13,23 @@ export const fetchTopMoviesAsync = createAsyncThunk<
   { rejectValue: string }
 >("movie/fetchTopMovies", async (_, thunkAPI) => {
   try {
-    const response = await axios.get<FetchTopMoviesResponse>(
+    const response = await axios.get(
       `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}`
+    );
+    return response.data.results;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue("Failed to fetch movies");
+  }
+});
+
+export const fetchMoviesBySearchAsync = createAsyncThunk<
+  Movie[],
+  string,
+  { rejectValue: string }
+>("movie/fetchMoviesBySearch", async (text, thunkAPI) => {
+  try {
+    const response = await axios.get(
+      `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en-US&query=${text}&page=1&include_adult=false`
     );
     return response.data.results;
   } catch (error: any) {
@@ -46,6 +60,18 @@ const movieSlice = createSlice({
         state.topMovies = action.payload;
       })
       .addCase(fetchTopMoviesAsync.rejected, (state, action) => {
+        state.status = "rejected";
+        state.error = action.payload as string;
+      })
+      .addCase(fetchMoviesBySearchAsync.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchMoviesBySearchAsync.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.fetchedMovies = action.payload;
+      })
+      .addCase(fetchMoviesBySearchAsync.rejected, (state, action) => {
         state.status = "rejected";
         state.error = action.payload as string;
       });

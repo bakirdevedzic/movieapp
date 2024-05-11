@@ -11,10 +11,6 @@ export type initialMovieStateType = {
   error: string;
 };
 
-export type FetchTopMoviesResponse = {
-  results: Movie[];
-};
-
 export type Show = {
   id: number;
   title: string;
