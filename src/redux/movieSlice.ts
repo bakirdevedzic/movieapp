@@ -1,9 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
+  Cast,
   Movie,
   initialMovieStateType as initialStateType,
 } from "../types/types";
 import axios from "axios";
+import { getTrailerKeyFromResponse } from "../utils/helpers";
 
 const API_KEY = "20ed5b330941aa4c2592b1af5b8ca46e";
 
@@ -46,10 +48,41 @@ export const fetchMovieAsync = createAsyncThunk<
     const response = await axios.get(
       `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=en-US`
     );
-
     return response.data;
   } catch (error: any) {
     return thunkAPI.rejectWithValue("Failed to fetch movies");
+  }
+});
+
+export const fetchTrailerKeyAsync = createAsyncThunk<
+  string,
+  number,
+  { rejectValue: string }
+>("movie/fetchTrailerKey", async (id, thunkAPI) => {
+  try {
+    const response = await axios.get(
+      `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}&language=en-US`
+    );
+
+    const trailerKey = getTrailerKeyFromResponse(response.data.results);
+    return trailerKey;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue("Failed to fetch trailer key");
+  }
+});
+
+export const fetchMovieCreditsAsync = createAsyncThunk<
+  Cast[],
+  number,
+  { rejectValue: string }
+>("movie/fetchCredits", async (id, thunkAPI) => {
+  try {
+    const response = await axios.get(
+      `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${API_KEY}&language=en-US`
+    );
+    return response.data.cast.slice(0, 6);
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue("Failed to fetch movie credits");
   }
 });
 
@@ -98,9 +131,32 @@ const movieSlice = createSlice({
       .addCase(fetchMovieAsync.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.currentMovie = action.payload;
-        console.log(action.payload);
       })
       .addCase(fetchMovieAsync.rejected, (state, action) => {
+        state.status = "rejected";
+        state.error = action.payload as string;
+      })
+      .addCase(fetchTrailerKeyAsync.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchTrailerKeyAsync.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.currentMovie = state.currentMovie
+          ? { ...state.currentMovie, trailer: action.payload }
+          : null;
+      })
+      .addCase(fetchMovieCreditsAsync.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchMovieCreditsAsync.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.currentMovie = state.currentMovie
+          ? { ...state.currentMovie, cast: action.payload }
+          : null;
+      })
+      .addCase(fetchMovieCreditsAsync.rejected, (state, action) => {
         state.status = "rejected";
         state.error = action.payload as string;
       });

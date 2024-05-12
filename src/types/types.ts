@@ -5,6 +5,16 @@ export type Movie = {
   poster_path: string;
   vote_average: number;
   overview: string | "";
+  trailer: string;
+  cast: Cast[];
+  backdrop_path: string;
+};
+
+export type Cast = {
+  id: number;
+  name: string;
+  profile_path: string;
+  character: string;
 };
 
 export type initialMovieStateType = {

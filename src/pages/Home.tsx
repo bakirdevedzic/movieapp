@@ -42,6 +42,7 @@ function Home() {
       if (searchTimeoutRef.current) {
         clearTimeout(searchTimeoutRef.current);
         searchTimeoutRef.current = null;
+        setLoading(false);
       }
     }
 
