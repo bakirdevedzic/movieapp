@@ -22,7 +22,7 @@ function Movie() {
   const movie = useSelector<any, any>((state) => state.movie.currentMovie);
   const search = useSelector<any, any>((state) => state.search.search);
   const tab = useSelector<any, any>((state) => state.search.tab);
-  console.log(search, "----", tab);
+  console.log(search, "-", tab);
   const navigate = useNavigate();
 
   if (status === "loading") return <div>Loading</div>;

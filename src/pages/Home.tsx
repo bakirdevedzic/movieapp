@@ -10,6 +10,7 @@ import Tab from "../ui/Tab";
 import Search from "../components/Search";
 import Card from "../components/Card";
 import { Movie, Show } from "../types/types";
+import LoadingMovies from "../components/LoadingMovies";
 
 function Home() {
   const searchState = useSelector<any, any>((state) => state.search.search);
@@ -23,17 +24,19 @@ function Home() {
   const moviesStatus = useSelector<any, any>((state) => state.movie.status);
   const showsStatus = useSelector<any, any>((state) => state.show.status);
 
+  const [loading, setLoading] = useState(false);
+
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   useEffect(() => {
     if (search.length > 2) {
       if (searchTimeoutRef.current) {
         clearTimeout(searchTimeoutRef.current);
       }
-
+      setLoading(true);
       searchTimeoutRef.current = setTimeout(() => {
-        if (tab === "movie") dispatch(fetchMoviesBySearchAsync(search));
-        else dispatch(fetchShowsBySearchAsync(search));
-        dispatch(changeSearch({ search, tab }));
+        dispatch(fetchMoviesBySearchAsync(search));
+        dispatch(fetchShowsBySearchAsync(search));
+        setLoading(false);
       }, 1000);
     } else {
       if (searchTimeoutRef.current) {
@@ -47,7 +50,7 @@ function Home() {
         clearTimeout(searchTimeoutRef.current);
       }
     };
-  }, [search, tab]);
+  }, [search]);
 
   const fetchedMovies = useSelector<any, any>(
     (state) => state.movie.fetchedMovies
@@ -59,10 +62,10 @@ function Home() {
 
   return (
     <div className="flex flex-col justify-center items-center bg-gray-50">
-      <div className="text-3xl font-outfit font-bold mb-6 py-3 bg-primary-orange text-white w-[100%] text-center shadow-md">
+      <div className="text-2xl font-outfit font-bold mb-6 py-2 bg-primary-orange text-white w-[100%] text-center shadow-md">
         Movie App
       </div>
-      <div className="max-w-[1400px] w-[100%] flex flex-col gap-3  p-4 items-center">
+      <div className="max-w-[1400px] w-[100%] flex flex-col gap-3  p-4 items-center min-h-screen">
         <div className="flex flex-row gap-0 w-[100%]">
           <Tab
             onClick={() => setTab("movie")}
@@ -78,32 +81,57 @@ function Home() {
 
         <Search onChange={(e) => setSearch(e.target.value)} value={search} />
 
-        <div className="grid grid-cols-4 md:grid-cols-3 sm:grid-cols-2 us:grid-cols-1 gap-3 gap-y-7 w-[100%] justify-items-center">
-          {topMovies &&
-            search.length < 3 &&
-            tab === "movie" &&
-            topMovies.map((movie: Movie) => (
-              <Card typeOfCard="movie" movie={movie} key={movie.id} />
-            ))}
-          {fetchedMovies &&
-            search.length > 2 &&
-            tab === "movie" &&
-            fetchedMovies.map((movie: Movie) => (
-              <Card typeOfCard="movie" movie={movie} key={movie.id} />
-            ))}
-          {topShows &&
-            search.length < 3 &&
-            tab === "show" &&
-            topShows.map((show: Show) => (
-              <Card typeOfCard="show" show={show} key={show.id} />
-            ))}
-          {fetchedShows &&
-            search.length > 2 &&
-            tab === "show" &&
-            fetchedShows.map((show: Show) => (
-              <Card typeOfCard="show" show={show} key={show.id} />
-            ))}
-        </div>
+        {loading || moviesStatus === "loading" || showsStatus === "loading" ? (
+          <LoadingMovies />
+        ) : (
+          <div className="grid grid-cols-4 md:grid-cols-3 sm:grid-cols-2 us:grid-cols-1 gap-3 gap-y-7 w-[100%] justify-items-center mt-4">
+            {topMovies &&
+              search.length < 3 &&
+              tab === "movie" &&
+              topMovies.map((movie: Movie) => (
+                <Card
+                  typeOfCard="movie"
+                  movie={movie}
+                  key={movie.id}
+                  state={{ search: search, tab: tab }}
+                />
+              ))}
+            {fetchedMovies &&
+              search.length > 2 &&
+              tab === "movie" &&
+              loading === false &&
+              fetchedMovies.map((movie: Movie) => (
+                <Card
+                  typeOfCard="movie"
+                  movie={movie}
+                  key={movie.id}
+                  state={{ search: search, tab: tab }}
+                />
+              ))}
+            {topShows &&
+              search.length < 3 &&
+              tab === "show" &&
+              topShows.map((show: Show) => (
+                <Card
+                  typeOfCard="show"
+                  show={show}
+                  key={show.id}
+                  state={{ search: search, tab: tab }}
+                />
+              ))}
+            {fetchedShows &&
+              search.length > 2 &&
+              tab === "show" &&
+              fetchedShows.map((show: Show) => (
+                <Card
+                  typeOfCard="show"
+                  show={show}
+                  key={show.id}
+                  state={{ search: search, tab: tab }}
+                />
+              ))}
+          </div>
+        )}
       </div>
     </div>
   );

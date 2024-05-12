@@ -57,7 +57,7 @@ const initialState: initialStateType = {
   topMovies: [],
   currentMovie: null,
   fetchedMovies: [],
-  status: "idle",
+  status: "succeeded",
   error: "",
 };
 
