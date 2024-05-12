@@ -9,7 +9,8 @@ module.exports = {
       colors: {
         "primary-black": "#1D2024",
         "primary-gray": "#666666",
-        "primary-orange": "#F37515",
+        "primary-orange": "#f2784b",
+        "primary-orange2": "#ff9470",
         "primary-white-2": "#ebf0f4",
       },
       height: {

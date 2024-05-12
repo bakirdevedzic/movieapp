@@ -11,7 +11,8 @@ const searchSlice = createSlice({
   initialState,
   reducers: {
     changeSearch(state, action) {
-      (state.search = action.payload.search), (state.tab = action.payload.tab);
+      state.search = action.payload.search;
+      state.tab = action.payload.tab;
     },
   },
 });
