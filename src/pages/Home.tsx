@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import { changeSearch } from "../redux/searchSlice";
 import Tab from "../ui/Tab";
 import Search from "../components/Search";
+import Card from "../components/Card";
+import { Movie, Show } from "../types/types";
 
 function Home() {
   const searchState = useSelector<any, any>((state) => state.search.search);
@@ -56,9 +58,12 @@ function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col justify-center items-center bg-gray-50 pt-24">
-      <div className="max-w-[1300px] w-[100%] flex flex-col gap-3">
-        <div className="flex flex-row gap-0">
+    <div className="flex flex-col justify-center items-center bg-gray-50">
+      <div className="text-3xl font-outfit font-bold mb-6 py-3 bg-primary-orange text-white w-[100%] text-center shadow-md">
+        Movie App
+      </div>
+      <div className="max-w-[1400px] w-[100%] flex flex-col gap-3  p-4 items-center">
+        <div className="flex flex-row gap-0 w-[100%]">
           <Tab
             onClick={() => setTab("movie")}
             text={"Movies"}
@@ -72,50 +77,31 @@ function Home() {
         </div>
 
         <Search onChange={(e) => setSearch(e.target.value)} value={search} />
-        <div className="grid grid-cols-3 justify-space-between">
+
+        <div className="grid grid-cols-4 md:grid-cols-3 sm:grid-cols-2 us:grid-cols-1 gap-3 gap-y-7 w-[100%] justify-items-center">
           {topMovies &&
             search.length < 3 &&
             tab === "movie" &&
-            topMovies.map((movie: any) => (
-              <div
-                className="bg-red-400 h-[100px] w-[500px] flex justify-center items-center"
-                onClick={() => navigate(`/movie/${movie.id}`)}
-              >
-                {movie.title}
-              </div>
+            topMovies.map((movie: Movie) => (
+              <Card typeOfCard="movie" movie={movie} key={movie.id} />
             ))}
           {fetchedMovies &&
             search.length > 2 &&
             tab === "movie" &&
-            fetchedMovies.map((movie: any) => (
-              <div
-                className="bg-red-400 h-[100px] w-[500px] flex justify-center items-center"
-                onClick={() => navigate(`/movie/${movie.id}`)}
-              >
-                {movie.title}
-              </div>
+            fetchedMovies.map((movie: Movie) => (
+              <Card typeOfCard="movie" movie={movie} key={movie.id} />
             ))}
           {topShows &&
             search.length < 3 &&
             tab === "show" &&
-            topShows.map((show: any) => (
-              <div
-                className="bg-red-400 h-[100px] w-[500px] flex justify-center items-center"
-                onClick={() => navigate(`/show/${show.id}`)}
-              >
-                {show.name}
-              </div>
+            topShows.map((show: Show) => (
+              <Card typeOfCard="show" show={show} key={show.id} />
             ))}
           {fetchedShows &&
             search.length > 2 &&
             tab === "show" &&
-            fetchedShows.map((show: any) => (
-              <div
-                className="bg-red-400 h-[100px] w-[500px] flex justify-center items-center"
-                onClick={() => navigate(`/show/${show.id}`)}
-              >
-                {show.name}
-              </div>
+            fetchedShows.map((show: Show) => (
+              <Card typeOfCard="show" show={show} key={show.id} />
             ))}
         </div>
       </div>

@@ -17,7 +17,7 @@ export const fetchTopShowsAsync = createAsyncThunk<
     const response = await axios.get(
       `https://api.themoviedb.org/3/tv/top_rated?api_key=${API_KEY}`
     );
-    return response.data.results;
+    return response.data.results.slice(0, 10);
   } catch (error: any) {
     return thunkAPI.rejectWithValue("Failed to fetch shows");
   }
@@ -32,7 +32,7 @@ export const fetchShowsBySearchAsync = createAsyncThunk<
     const response = await axios.get(
       `https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&language=en-US&page=1&query=${text}&include_adult=false`
     );
-    return response.data.results;
+    return response.data.results.slice(0, 10);
   } catch (error: any) {
     return thunkAPI.rejectWithValue("Failed to fetch movies");
   }

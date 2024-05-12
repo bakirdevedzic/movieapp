@@ -1,6 +1,10 @@
 export type Movie = {
   id: number;
   title: string;
+  release_date: string;
+  poster_path: string;
+  vote_average: number;
+  overview: string | "";
 };
 
 export type initialMovieStateType = {
@@ -13,7 +17,11 @@ export type initialMovieStateType = {
 
 export type Show = {
   id: number;
-  title: string;
+  name: string;
+  first_air_date: number;
+  vote_average: number;
+  poster_path: string;
+  overview: string | "";
 };
 
 export type initialShowType = {
