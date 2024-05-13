@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { ScrollRestoration, useNavigate, useParams } from "react-router-dom";
 import { AppDispatch } from "../store";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -41,9 +41,6 @@ function Movie() {
     fetching();
   }, [id]);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
   const movie = useSelector<any, any>((state) => state.movie.currentMovie);
   const search = useSelector<any, any>((state) => state.search.search);
   const tab = useSelector<any, any>((state) => state.search.tab);

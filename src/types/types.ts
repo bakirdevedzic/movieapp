@@ -33,6 +33,10 @@ export type Show = {
   vote_average: number;
   poster_path: string;
   overview: string | "";
+  trailer: string;
+  cast: Cast[];
+  backdrop_path: string;
+  recommended: Show[];
 };
 
 export type initialShowType = {
