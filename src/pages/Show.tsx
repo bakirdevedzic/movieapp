@@ -20,14 +20,17 @@ import ActorsComponent from "../components/ActorsComponent";
 import RecommendedMovies from "../components/Recommended";
 import NavigationButtons from "../components/NavigationButtons";
 import { useFetchShowData } from "../hooks/useFetchShowData";
+import PageNotFound from "./PageNotFound";
 
 function Show() {
   let { id } = useParams();
   if (!id) id = "";
-  const { loading } = useFetchShowData(id);
+  const { loading, idError } = useFetchShowData(id);
 
   const show = useSelector<any, any>((state) => state.show.currentShow);
+  const error = useSelector<any, any>((state) => state.show.error);
 
+  if (error || idError) return <PageNotFound />;
   if (loading) return <MovieSkeleton />;
 
   return (

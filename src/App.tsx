@@ -18,12 +18,6 @@ import Show from "./pages/Show";
 import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
-  const dispatch = useDispatch<AppDispatch>();
-  useEffect(() => {
-    dispatch(fetchTopMoviesAsync());
-    dispatch(fetchTopShowsAsync());
-  }, [dispatch]);
-
   return (
     <BrowserRouter>
       <ScrollToTop />

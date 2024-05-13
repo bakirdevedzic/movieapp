@@ -54,7 +54,7 @@ export const fetchShowAsync = createAsyncThunk<
       title: response.data.name,
       release_date: response.data.first_air_date,
     };
-    console.log("show", show);
+
     return show;
   } catch (error: any) {
     return thunkAPI.rejectWithValue("Failed to fetch show");

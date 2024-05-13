@@ -11,7 +11,7 @@ function ActorCard({ actor }: ActorCardProps) {
     actor?.character?.length > 30
       ? actor?.character.slice(0, 30) + "..."
       : actor?.character;
-  console.log(actor?.profile_path);
+
   return (
     <div className=" flex w-[170px] flex-col  items-center justify-between align-middle p-3 hover:scale-105 ">
       {actor?.profile_path ? (

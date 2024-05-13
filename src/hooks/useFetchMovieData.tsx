@@ -11,7 +11,7 @@ import { AppDispatch } from "../store";
 export const useFetchMovieData = (id: string) => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch<AppDispatch>();
-
+  const [idError, setIdError] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
@@ -19,17 +19,18 @@ export const useFetchMovieData = (id: string) => {
         if (!isNaN(numericId)) {
           try {
             setLoading(true);
+
             await dispatch(fetchMovieAsync(numericId));
             await dispatch(fetchTrailerKeyAsync(numericId));
             await dispatch(fetchMovieCreditsAsync(numericId));
             await dispatch(fetchRecommendedMovies(numericId));
           } catch (error) {
-            console.error("Error fetching movie data:", error);
+            return;
           } finally {
             setLoading(false);
           }
         } else {
-          console.warn("Invalid movie ID provided:", id);
+          setIdError(true);
         }
       }
     };
@@ -44,5 +45,5 @@ export const useFetchMovieData = (id: string) => {
     fetchRecommendedMovies,
   ]);
 
-  return { loading };
+  return { loading, idError };
 };

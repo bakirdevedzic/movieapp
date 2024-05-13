@@ -13,7 +13,7 @@ function Recommended({ object, type }: RecommendedMovies) {
       <div className="flex flex-row w-[100%] justify-between sm:grid sm:grid-cols-3 us:grid-cols-2 mt-2">
         {object?.recommended &&
           object.recommended.map((object: Movie | Show) => (
-            <RecommendedMovie object={object} type={type} />
+            <RecommendedMovie object={object} type={type} key={object.id} />
           ))}
       </div>
     </div>

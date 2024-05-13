@@ -8,16 +8,19 @@ import ActorsComponent from "../components/ActorsComponent";
 import RecommendedMovies from "../components/Recommended";
 import NavigationButtons from "../components/NavigationButtons";
 import { useFetchMovieData } from "../hooks/useFetchMovieData";
+import { useMemo } from "react";
+import PageNotFound from "./PageNotFound";
+import { useDispatch } from "react-redux";
 
 function Movie() {
   let { id } = useParams();
   const movie = useSelector<any, any>((state) => state.movie.currentMovie);
 
+  const error = useSelector<any, any>((state) => state.movie.error);
   if (!id) id = "";
-  const { loading } = useFetchMovieData(id);
+  const { loading, idError } = useFetchMovieData(id);
 
-  console.log(movie);
-
+  if (error || idError) return <PageNotFound />;
   if (loading) return <MovieSkeleton />;
 
   return (

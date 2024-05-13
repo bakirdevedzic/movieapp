@@ -2,8 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { AppDispatch } from "../store";
-import { fetchMoviesBySearchAsync } from "../redux/movieSlice";
-import { fetchShowsBySearchAsync } from "../redux/showSlice";
+import {
+  fetchMoviesBySearchAsync,
+  fetchTopMoviesAsync,
+} from "../redux/movieSlice";
+import {
+  fetchShowsBySearchAsync,
+  fetchTopShowsAsync,
+} from "../redux/showSlice";
 import { useNavigate } from "react-router-dom";
 import { changeSearch } from "../redux/searchSlice";
 import Tab from "../ui/Tab";
@@ -24,6 +30,10 @@ function Home() {
 
   const moviesStatus = useSelector<any, any>((state) => state.movie.status);
   const showsStatus = useSelector<any, any>((state) => state.show.status);
+  useEffect(() => {
+    dispatch(fetchTopMoviesAsync());
+    dispatch(fetchTopShowsAsync());
+  }, [dispatch]);
 
   const [loading, setLoading] = useState(false);
 

@@ -50,7 +50,7 @@ export const fetchMovieAsync = createAsyncThunk<
     );
     return response.data;
   } catch (error: any) {
-    return thunkAPI.rejectWithValue("Failed to fetch movies");
+    return thunkAPI.rejectWithValue("Failed to fetch movie");
   }
 });
 
@@ -98,7 +98,7 @@ export const fetchRecommendedMovies = createAsyncThunk<
 
     return response.data.results.slice(0, 6);
   } catch (error: any) {
-    return thunkAPI.rejectWithValue("Failed to fetch movie credits");
+    return thunkAPI.rejectWithValue("Failed to fetch movie recommended");
   }
 });
 

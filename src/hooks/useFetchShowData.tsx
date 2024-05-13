@@ -11,7 +11,7 @@ import {
 export const useFetchShowData = (id: string) => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch<AppDispatch>();
-
+  const [idError, setIdError] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
@@ -24,12 +24,12 @@ export const useFetchShowData = (id: string) => {
             await dispatch(fetchShowCreditsAsync(numericId));
             await dispatch(fetchRecommendedShowsAsync(numericId));
           } catch (error) {
-            console.error("Error fetching show data:", error);
+            throw error;
           } finally {
             setLoading(false);
           }
         } else {
-          console.warn("Invalid show ID provided:", id);
+          setIdError(true);
         }
       }
     };
@@ -44,5 +44,5 @@ export const useFetchShowData = (id: string) => {
     fetchRecommendedShowsAsync,
   ]);
 
-  return { loading };
+  return { loading, idError };
 };
