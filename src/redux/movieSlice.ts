@@ -86,6 +86,22 @@ export const fetchMovieCreditsAsync = createAsyncThunk<
   }
 });
 
+export const fetchRecommendedMovies = createAsyncThunk<
+  Movie[],
+  number,
+  { rejectValue: string }
+>("movie/fetchRecommended", async (id, thunkAPI) => {
+  try {
+    const response = await axios.get(
+      `https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=${API_KEY}`
+    );
+    console.log("r", response.data.results);
+    return response.data.cast.slice(0, 6);
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue("Failed to fetch movie credits");
+  }
+});
+
 const initialState: initialStateType = {
   topMovies: [],
   currentMovie: null,
@@ -157,6 +173,20 @@ const movieSlice = createSlice({
           : null;
       })
       .addCase(fetchMovieCreditsAsync.rejected, (state, action) => {
+        state.status = "rejected";
+        state.error = action.payload as string;
+      })
+      .addCase(fetchRecommendedMovies.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchRecommendedMovies.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.currentMovie = state.currentMovie
+          ? { ...state.currentMovie, recommended: action.payload }
+          : null;
+      })
+      .addCase(fetchRecommendedMovies.rejected, (state, action) => {
         state.status = "rejected";
         state.error = action.payload as string;
       });

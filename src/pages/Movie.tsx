@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import {
   fetchMovieAsync,
   fetchMovieCreditsAsync,
+  fetchRecommendedMovies,
   fetchTrailerKeyAsync,
 } from "../redux/movieSlice";
 import YouTube from "react-youtube";
@@ -24,6 +25,7 @@ function Movie() {
         dispatch(fetchMovieAsync(numericId));
         dispatch(fetchTrailerKeyAsync(numericId));
         dispatch(fetchMovieCreditsAsync(numericId));
+        dispatch(fetchRecommendedMovies(numericId));
       } else {
       }
     }

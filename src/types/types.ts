@@ -8,6 +8,7 @@ export type Movie = {
   trailer: string;
   cast: Cast[];
   backdrop_path: string;
+  recommended: Movie[];
 };
 
 export type Cast = {
