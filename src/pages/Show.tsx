@@ -16,6 +16,8 @@ import {
   fetchTrailerKeyAsync,
 } from "../redux/showSlice";
 import Header from "../ui/Header";
+import Button from "../ui/Button";
+import Banner from "../components/Banner";
 
 function Show() {
   const { id } = useParams();
@@ -58,47 +60,11 @@ function Show() {
       <Header />
       <div className="max-w-[1300px] w-[100%] flex flex-col gap-3  p-4 items-center min-h-screen ">
         <div className="flex flex-row gap-2 w-[100%]">
-          <button
-            className="border-primary-orange rounded-lg text-primary-orange p-3 border w-[100px] hover:bg-primary-orange hover:text-white hover:border-primary-orange font-outfit font-bold text-sm"
-            onClick={() => navigate(-1)}
-          >
-            Go back!
-          </button>
-          <button
-            className="border-primary-orange rounded-lg text-primary-orange p-3 border w-[100px] hover:bg-primary-orange hover:text-white hover:border-primary-orange font-outfit font-bold text-sm"
-            onClick={() => navigate(`/`)}
-          >
-            Home!
-          </button>
+          <Button onClick={() => navigate(-1)} text="Go back!" />
+          <Button onClick={() => navigate(`/`)} text="Home!" />
         </div>
-        <div className="w-[100%]">
-          {show?.trailer && show.trailer !== "" && (
-            <YouTube
-              videoId={show.trailer}
-              opts={{
-                width: "100%",
-                playerVars: { autoplay: 0 },
-              }}
-              iframeClassName="rounded-lg"
-            />
-          )}
-          {show?.backdrop_path &&
-            show.backdrop_path !== "" &&
-            show.trailer === "" && (
-              <img
-                src={`https://image.tmdb.org/t/p/w500/${show.backdrop_path}`}
-                alt={show.name}
-                className="min-w-[100%] object-fit rounded-xl shadow-lg"
-              />
-            )}
-          {show?.backdrop_path &&
-            show.backdrop_path === "" &&
-            show.trailer === "" && (
-              <div className="w-[100%] h-[400px] flex justify-center items-center font-bold font-outfit text-gray-600 rounded-xl shadow-lg">
-                There is no trailer or poster!
-              </div>
-            )}
-        </div>
+
+        <Banner object={show} />
         <div className="w-[100%] mt-8 text-2xl font-outfit font-semibold whitespace-break-spaces text-primary-black">
           {show?.name}
         </div>

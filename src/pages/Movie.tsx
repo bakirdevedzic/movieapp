@@ -15,6 +15,8 @@ import { Cast } from "../types/types";
 import RecommendedMovie from "../components/RecommendedMovie";
 import MovieSkeleton from "../components/MovieSkeleton";
 import Header from "../ui/Header";
+import Button from "../ui/Button";
+import Banner from "../components/Banner";
 
 function Movie() {
   const { id } = useParams();
@@ -56,47 +58,12 @@ function Movie() {
       <Header />
       <div className="max-w-[1300px] w-[100%] flex flex-col gap-3  p-4 items-center min-h-screen ">
         <div className="flex flex-row gap-2 w-[100%]">
-          <button
-            className="border-primary-orange rounded-lg text-primary-orange p-3 border w-[100px] hover:bg-primary-orange hover:text-white hover:border-primary-orange font-outfit font-bold text-sm"
-            onClick={() => navigate(-1)}
-          >
-            Go back!
-          </button>
-          <button
-            className="border-primary-orange rounded-lg text-primary-orange p-3 border w-[100px] hover:bg-primary-orange hover:text-white hover:border-primary-orange font-outfit font-bold text-sm"
-            onClick={() => navigate(`/`)}
-          >
-            Home!
-          </button>
+          <div className="flex flex-row gap-2 w-[100%]">
+            <Button onClick={() => navigate(-1)} text="Go back!" />
+            <Button onClick={() => navigate(`/`)} text="Home!" />
+          </div>
         </div>
-        <div className="w-[100%]">
-          {movie?.trailer && movie.trailer !== "" && (
-            <YouTube
-              videoId={movie.trailer}
-              opts={{
-                width: "100%",
-                playerVars: { autoplay: 0 },
-              }}
-              iframeClassName="rounded-lg"
-            />
-          )}
-          {movie?.backdrop_path &&
-            movie.backdrop_path !== "" &&
-            movie.trailer === "" && (
-              <img
-                src={`https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`}
-                alt={movie.title}
-                className="min-w-[100%] object-fit rounded-xl shadow-lg"
-              />
-            )}
-          {movie?.backdrop_path &&
-            movie.backdrop_path === "" &&
-            movie.trailer === "" && (
-              <div className="w-[100%] h-[400px] flex justify-center items-center font-bold font-outfit text-gray-600 rounded-xl shadow-lg">
-                There is no trailer or poster!
-              </div>
-            )}
-        </div>
+        <Banner object={movie} />
         <div className="w-[100%] mt-8 text-2xl font-outfit font-semibold whitespace-break-spaces text-primary-black">
           {movie?.title}
         </div>
