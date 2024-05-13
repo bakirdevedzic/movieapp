@@ -40,7 +40,7 @@ export const fetchShowsBySearchAsync = createAsyncThunk<
 });
 
 export const fetchShowAsync = createAsyncThunk<
-  Show,
+  any,
   number,
   { rejectValue: string }
 >("movie/fetchShow", async (id, thunkAPI) => {
@@ -48,7 +48,14 @@ export const fetchShowAsync = createAsyncThunk<
     const response = await axios.get(
       `https://api.themoviedb.org/3/tv/${id}?api_key=${API_KEY}`
     );
-    return response.data;
+    const show = {
+      ...response.data,
+      runtime: response.data.episode_run_time[0],
+      title: response.data.name,
+      release_date: response.data.first_air_date,
+    };
+    console.log("show", show);
+    return show;
   } catch (error: any) {
     return thunkAPI.rejectWithValue("Failed to fetch show");
   }
@@ -95,7 +102,16 @@ export const fetchRecommendedShowsAsync = createAsyncThunk<
     const response = await axios.get(
       `https://api.themoviedb.org/3/tv/${id}/recommendations?api_key=${API_KEY}`
     );
-    return response.data.results.slice(0, 6);
+    const recommended = response.data.results
+      .slice(0, 6)
+      .map((object: Show) => {
+        return {
+          ...object,
+          title: object.name,
+          release_date: object.first_air_date,
+        };
+      });
+    return recommended;
   } catch (error: any) {
     return thunkAPI.rejectWithValue("Failed to fetch recommended shows");
   }

@@ -11,13 +11,20 @@ function ActorCard({ actor }: ActorCardProps) {
     actor?.character?.length > 30
       ? actor?.character.slice(0, 30) + "..."
       : actor?.character;
+  console.log(actor?.profile_path);
   return (
     <div className=" flex w-[170px] flex-col  items-center justify-between align-middle p-3 hover:scale-105 ">
-      <img
-        src={`https://image.tmdb.org/t/p/w500${actor?.profile_path}`}
-        className="rounded-full h-[100px] w-[100px] shadow-lg  object-cover"
-        alt="actor"
-      />
+      {actor?.profile_path ? (
+        <img
+          src={`https://image.tmdb.org/t/p/w500${actor?.profile_path}`}
+          className="rounded-full h-[100px] w-[100px] shadow-lg  object-cover"
+          alt="actor"
+        />
+      ) : (
+        <div className="rounded-full h-[100px] w-[100px] shadow-lg  object-cover flex justify-center align-middle items-center border">
+          No photo!
+        </div>
+      )}
 
       <div className="text-xl h-[auto] font-bold font-outfit text-center break-normal mt-2">
         {name}

@@ -9,14 +9,15 @@ import {
   fetchRecommendedMovies,
   fetchTrailerKeyAsync,
 } from "../redux/movieSlice";
-import YouTube from "react-youtube";
-import ActorCard from "../components/ActorCard";
-import { Cast } from "../types/types";
+
 import RecommendedMovie from "../components/RecommendedMovie";
 import MovieSkeleton from "../components/MovieSkeleton";
 import Header from "../ui/Header";
 import Button from "../ui/Button";
 import Banner from "../components/Banner";
+import PlotCard from "../components/PlotCard";
+import ActorsComponent from "../components/ActorsComponent";
+import RecommendedMovies from "../components/RecommendedMovies";
 
 function Movie() {
   const { id } = useParams();
@@ -51,6 +52,7 @@ function Movie() {
   const released = movie?.release_date;
   const year = typeof released === "string" ? released.slice(0, 4) : "";
 
+  console.log(movie);
   if (loading) return <MovieSkeleton />;
 
   return (
@@ -65,44 +67,12 @@ function Movie() {
         </div>
         <Banner object={movie} />
         <div className="w-[100%] mt-8 text-2xl font-outfit font-semibold whitespace-break-spaces text-primary-black">
-          {movie?.title}
+          {movie?.title ? movie.title : "No data"}
         </div>
-        <div className="w-[100%] h-auto grid grid-cols-[250px_1fr] bg-white rounded-xl  border-2 mt-5 items-center sm:flex sm:flex-col">
-          <div className="">
-            {movie?.poster_path ? (
-              <img
-                src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-                className="h-[300px] rounded-xl shadow-lg"
-              />
-            ) : (
-              <div className="w-[100%] h-[300px] flex justify-center items-center font-bold font-outfit text-gray-600 rounded-xl shadow-lg">
-                No poster available!{" "}
-              </div>
-            )}
-          </div>
-          <div className="flex flex-col justify-between h-[100%] p-3 min-h-[300px]">
-            <div className="h-[auto] text-lg font-outfit font-light">
-              <p className="mb-3 font-semibold">The plot</p>
 
-              {movie?.overview}
-            </div>
-            <div className="h-[auto] flex flex-row gap-2 font-semibold font-outfit">
-              <p>{year ? year : "No data"} • </p>
-              <p>{movie?.runtime ? movie.runtime + " min" : "No data"} • </p>
-              <p>
-                {movie?.genres?.[0].name ? movie?.genres?.[0].name : "No data"}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="w-[100%] mt-3">
-          <p className="text-2xl font-outfit font-semibold">Cast</p>
-          <div className="flex flex-row w-[100%]  sm:grid sm:grid-cols-3 us:grid-cols-2">
-            {movie?.cast &&
-              movie.cast.map((cast: Cast) => <ActorCard actor={cast} />)}
-          </div>
-        </div>
-        <div className="w-[100%] mt-3">
+        <PlotCard object={movie} />
+        <ActorsComponent object={movie} />
+        {/* <div className="w-[100%] mt-3">
           <p className="text-2xl font-outfit font-semibold">Recommended</p>
           <div className="flex flex-row w-[100%] justify-between sm:grid sm:grid-cols-3 us:grid-cols-2 mt-2">
             {movie?.recommended &&
@@ -110,7 +80,8 @@ function Movie() {
                 <RecommendedMovie movie={movie} />
               ))}
           </div>
-        </div>
+        </div> */}
+        <RecommendedMovies object={movie} type="movie" />
       </div>
     </div>
   );

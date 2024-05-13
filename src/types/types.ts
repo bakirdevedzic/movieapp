@@ -9,6 +9,8 @@ export type Movie = {
   cast: Cast[];
   backdrop_path: string;
   recommended: Movie[];
+  runtime: number;
+  genres: any;
 };
 
 export type Cast = {
@@ -37,6 +39,10 @@ export type Show = {
   cast: Cast[];
   backdrop_path: string;
   recommended: Show[];
+  release_date: string;
+  runtime: number;
+  genres: any;
+  title?: string;
 };
 
 export type initialShowType = {

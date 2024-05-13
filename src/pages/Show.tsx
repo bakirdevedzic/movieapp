@@ -4,10 +4,6 @@ import { AppDispatch } from "../store";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
-import YouTube from "react-youtube";
-import ActorCard from "../components/ActorCard";
-import { Cast } from "../types/types";
-import RecommendedMovie from "../components/RecommendedMovie";
 import MovieSkeleton from "../components/MovieSkeleton";
 import {
   fetchRecommendedShowsAsync,
@@ -18,6 +14,10 @@ import {
 import Header from "../ui/Header";
 import Button from "../ui/Button";
 import Banner from "../components/Banner";
+import PlotCard from "../components/PlotCard";
+import ActorsComponent from "../components/ActorsComponent";
+import RecommendedMovie from "../components/RecommendedMovie";
+import RecommendedMovies from "../components/RecommendedMovies";
 
 function Show() {
   const { id } = useParams();
@@ -52,7 +52,6 @@ function Show() {
   const released = show?.first_air_date;
   const year = typeof released === "string" ? released.slice(0, 4) : "";
 
-  console.log(show);
   if (loading) return <MovieSkeleton />;
 
   return (
@@ -63,55 +62,14 @@ function Show() {
           <Button onClick={() => navigate(-1)} text="Go back!" />
           <Button onClick={() => navigate(`/`)} text="Home!" />
         </div>
-
         <Banner object={show} />
         <div className="w-[100%] mt-8 text-2xl font-outfit font-semibold whitespace-break-spaces text-primary-black">
-          {show?.name}
+          {show?.name ? show?.name : "No name available!"}
         </div>
-        <div className="w-[100%] h-auto grid grid-cols-[250px_1fr] bg-white rounded-xl  border-2 mt-5 items-center sm:flex sm:flex-col">
-          <div className="">
-            {show?.poster_path ? (
-              <img
-                src={`https://image.tmdb.org/t/p/w500/${show.poster_path}`}
-                className="h-[300px] rounded-xl shadow-lg"
-              />
-            ) : (
-              <div className="w-[100%] h-[300px] flex justify-center items-center font-bold font-outfit text-gray-600 rounded-xl shadow-lg">
-                No poster available!{" "}
-              </div>
-            )}
-          </div>
-          <div className="flex flex-col justify-between h-[100%] p-3 min-h-[300px]">
-            <div className="h-[auto] text-lg font-outfit font-light">
-              <p className="mb-3 font-semibold">The plot</p>
 
-              {show?.overview}
-            </div>
-            <div className="h-[auto] flex flex-row gap-2 font-semibold font-outfit">
-              <p>{year ? year : "No data"} • </p>
-              <p>{show?.runtime ? show.runtime + " min" : "No data"} • </p>
-              <p>
-                {show?.genres?.[0].name ? show?.genres?.[0].name : "No data"}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="w-[100%] mt-3">
-          <p className="text-2xl font-outfit font-semibold">Cast</p>
-          <div className="flex flex-row w-[100%]  sm:grid sm:grid-cols-3 us:grid-cols-2">
-            {show?.cast &&
-              show.cast.map((cast: Cast) => <ActorCard actor={cast} />)}
-          </div>
-        </div>
-        {/* <div className="w-[100%] mt-3">
-          <p className="text-2xl font-outfit font-semibold">Recommended</p>
-          <div className="flex flex-row w-[100%] justify-between sm:grid sm:grid-cols-3 us:grid-cols-2 mt-2">
-            {show?.recommended &&
-              show.recommended.map((movie: any) => (
-                <RecommendedMovie movie={movie} />
-              ))}
-          </div>
-        </div> */}
+        <PlotCard object={show} />
+        <ActorsComponent object={show} />
+        <RecommendedMovies object={show} type="show" />
       </div>
     </div>
   );
