@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { AppDispatch } from "../store";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   fetchMovieAsync,
   fetchMovieCreditsAsync,
@@ -12,47 +12,65 @@ import {
 import YouTube from "react-youtube";
 import ActorCard from "../components/ActorCard";
 import { Cast } from "../types/types";
+import RecommendedMovie from "../components/RecommendedMovie";
+import MovieSkeleton from "../components/MovieSkeleton";
 
 function Movie() {
   const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
   const status = useSelector<any, any>((state) => state.movie.status);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (id) {
-      const numericId = parseInt(id, 10);
-      if (!isNaN(numericId)) {
-        dispatch(fetchMovieAsync(numericId));
-        dispatch(fetchTrailerKeyAsync(numericId));
-        dispatch(fetchMovieCreditsAsync(numericId));
-        dispatch(fetchRecommendedMovies(numericId));
-      } else {
+    async function fetching() {
+      if (id) {
+        const numericId = parseInt(id, 10);
+        if (!isNaN(numericId)) {
+          setLoading(true);
+          await dispatch(fetchMovieAsync(numericId));
+          await dispatch(fetchTrailerKeyAsync(numericId));
+          await dispatch(fetchMovieCreditsAsync(numericId));
+          await dispatch(fetchRecommendedMovies(numericId));
+          setLoading(false);
+        } else {
+          navigate("/*");
+        }
       }
     }
+    fetching();
+  }, [id]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
   }, []);
   const movie = useSelector<any, any>((state) => state.movie.currentMovie);
   const search = useSelector<any, any>((state) => state.search.search);
   const tab = useSelector<any, any>((state) => state.search.tab);
 
-  const navigate = useNavigate();
   const released = movie?.release_date;
   const year = typeof released === "string" ? released.slice(0, 4) : "";
 
-  console.log(movie);
-  if (status === "loading") return <div>Loading</div>;
+  if (loading) return <MovieSkeleton />;
 
   return (
     <div className="flex flex-col justify-center items-center bg-gray-50">
       <div className="text-2xl font-outfit font-bold mb-6 py-2 bg-primary-orange text-white w-[100%] text-center shadow-md">
         Movie App
       </div>
-      <div className="max-w-[1100px] w-[100%] flex flex-col gap-3  p-4 items-center min-h-screen ">
-        <div className="flex flex-row gap-0 w-[100%]">
+      <div className="max-w-[1300px] w-[100%] flex flex-col gap-3  p-4 items-center min-h-screen ">
+        <div className="flex flex-row gap-2 w-[100%]">
           <button
-            className="border-primary-orange text-primary-orange p-3 border w-[100px] hover:bg-primary-orange hover:text-white hover:border-primary-orange font-outfit font-bold text-sm"
+            className="border-primary-orange rounded-lg text-primary-orange p-3 border w-[100px] hover:bg-primary-orange hover:text-white hover:border-primary-orange font-outfit font-bold text-sm"
             onClick={() => navigate(-1)}
           >
             Go back!
+          </button>
+          <button
+            className="border-primary-orange rounded-lg text-primary-orange p-3 border w-[100px] hover:bg-primary-orange hover:text-white hover:border-primary-orange font-outfit font-bold text-sm"
+            onClick={() => navigate(`/`)}
+          >
+            Home!
           </button>
         </div>
         <div className="w-[100%]">
@@ -63,6 +81,7 @@ function Movie() {
                 width: "100%",
                 playerVars: { autoplay: 0 },
               }}
+              iframeClassName="rounded-lg"
             />
           )}
           {movie?.backdrop_path &&
@@ -113,11 +132,20 @@ function Movie() {
             </div>
           </div>
         </div>
-        <div className="w-[100%]">
+        <div className="w-[100%] mt-3">
           <p className="text-2xl font-outfit font-semibold">Cast</p>
-          <div className="flex flex-row w-[100%] justify-between sm:grid sm:grid-cols-3 us:grid-cols-2">
+          <div className="flex flex-row w-[100%]  sm:grid sm:grid-cols-3 us:grid-cols-2">
             {movie?.cast &&
               movie.cast.map((cast: Cast) => <ActorCard actor={cast} />)}
+          </div>
+        </div>
+        <div className="w-[100%] mt-3">
+          <p className="text-2xl font-outfit font-semibold">Recommended</p>
+          <div className="flex flex-row w-[100%] justify-between sm:grid sm:grid-cols-3 us:grid-cols-2 mt-2">
+            {movie?.recommended &&
+              movie.recommended.map((movie: any) => (
+                <RecommendedMovie movie={movie} />
+              ))}
           </div>
         </div>
       </div>
