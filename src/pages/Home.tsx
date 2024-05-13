@@ -11,6 +11,7 @@ import Search from "../components/Search";
 import Card from "../components/Card";
 import { Movie, Show } from "../types/types";
 import LoadingMovies from "../components/LoadingMovies";
+import Header from "../ui/Header";
 
 function Home() {
   const searchState = useSelector<any, any>((state) => state.search.search);
@@ -63,9 +64,7 @@ function Home() {
 
   return (
     <div className="flex flex-col justify-center items-center bg-gray-50">
-      <div className="text-2xl font-outfit font-bold mb-6 py-2 bg-primary-orange text-white w-[100%] text-center shadow-md">
-        Movie App
-      </div>
+      <Header />
       <div className="max-w-[1400px] w-[100%] flex flex-col gap-3  p-4 items-center min-h-screen">
         <div className="flex flex-row gap-0 w-[100%]">
           <Tab

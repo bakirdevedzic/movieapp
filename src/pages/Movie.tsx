@@ -14,6 +14,7 @@ import ActorCard from "../components/ActorCard";
 import { Cast } from "../types/types";
 import RecommendedMovie from "../components/RecommendedMovie";
 import MovieSkeleton from "../components/MovieSkeleton";
+import Header from "../ui/Header";
 
 function Movie() {
   const { id } = useParams();
@@ -52,9 +53,7 @@ function Movie() {
 
   return (
     <div className="flex flex-col justify-center items-center bg-gray-50">
-      <div className="text-2xl font-outfit font-bold mb-6 py-2 bg-primary-orange text-white w-[100%] text-center shadow-md">
-        Movie App
-      </div>
+      <Header />
       <div className="max-w-[1300px] w-[100%] flex flex-col gap-3  p-4 items-center min-h-screen ">
         <div className="flex flex-row gap-2 w-[100%]">
           <button

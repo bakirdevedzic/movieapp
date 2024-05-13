@@ -3,22 +3,24 @@ import { ScrollRestoration, useNavigate, useParams } from "react-router-dom";
 import { AppDispatch } from "../store";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import {
-  fetchMovieAsync,
-  fetchMovieCreditsAsync,
-  fetchRecommendedMovies,
-  fetchTrailerKeyAsync,
-} from "../redux/movieSlice";
+
 import YouTube from "react-youtube";
 import ActorCard from "../components/ActorCard";
 import { Cast } from "../types/types";
 import RecommendedMovie from "../components/RecommendedMovie";
 import MovieSkeleton from "../components/MovieSkeleton";
+import {
+  fetchRecommendedShowsAsync,
+  fetchShowAsync,
+  fetchShowCreditsAsync,
+  fetchTrailerKeyAsync,
+} from "../redux/showSlice";
+import Header from "../ui/Header";
 
 function Show() {
   const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
-  const status = useSelector<any, any>((state) => state.movie.status);
+  const status = useSelector<any, any>((state) => state.show.status);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
@@ -28,10 +30,10 @@ function Show() {
         const numericId = parseInt(id, 10);
         if (!isNaN(numericId)) {
           setLoading(true);
-          await dispatch(fetchMovieAsync(numericId));
+          await dispatch(fetchShowAsync(numericId));
           await dispatch(fetchTrailerKeyAsync(numericId));
-          await dispatch(fetchMovieCreditsAsync(numericId));
-          await dispatch(fetchRecommendedMovies(numericId));
+          await dispatch(fetchShowCreditsAsync(numericId));
+          await dispatch(fetchRecommendedShowsAsync(numericId));
           setLoading(false);
         } else {
           navigate("/*");
@@ -41,20 +43,19 @@ function Show() {
     fetching();
   }, [id]);
 
-  const movie = useSelector<any, any>((state) => state.movie.currentMovie);
+  const show = useSelector<any, any>((state) => state.show.currentShow);
   const search = useSelector<any, any>((state) => state.search.search);
   const tab = useSelector<any, any>((state) => state.search.tab);
 
-  const released = movie?.release_date;
+  const released = show?.first_air_date;
   const year = typeof released === "string" ? released.slice(0, 4) : "";
 
+  console.log(show);
   if (loading) return <MovieSkeleton />;
 
   return (
     <div className="flex flex-col justify-center items-center bg-gray-50">
-      <div className="text-2xl font-outfit font-bold mb-6 py-2 bg-primary-orange text-white w-[100%] text-center shadow-md">
-        Movie App
-      </div>
+      <Header />
       <div className="max-w-[1300px] w-[100%] flex flex-col gap-3  p-4 items-center min-h-screen ">
         <div className="flex flex-row gap-2 w-[100%]">
           <button
@@ -71,9 +72,9 @@ function Show() {
           </button>
         </div>
         <div className="w-[100%]">
-          {movie?.trailer && movie.trailer !== "" && (
+          {show?.trailer && show.trailer !== "" && (
             <YouTube
-              videoId={movie.trailer}
+              videoId={show.trailer}
               opts={{
                 width: "100%",
                 playerVars: { autoplay: 0 },
@@ -81,31 +82,31 @@ function Show() {
               iframeClassName="rounded-lg"
             />
           )}
-          {movie?.backdrop_path &&
-            movie.backdrop_path !== "" &&
-            movie.trailer === "" && (
+          {show?.backdrop_path &&
+            show.backdrop_path !== "" &&
+            show.trailer === "" && (
               <img
-                src={`https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`}
-                alt={movie.title}
+                src={`https://image.tmdb.org/t/p/w500/${show.backdrop_path}`}
+                alt={show.name}
                 className="min-w-[100%] object-fit rounded-xl shadow-lg"
               />
             )}
-          {movie?.backdrop_path &&
-            movie.backdrop_path === "" &&
-            movie.trailer === "" && (
+          {show?.backdrop_path &&
+            show.backdrop_path === "" &&
+            show.trailer === "" && (
               <div className="w-[100%] h-[400px] flex justify-center items-center font-bold font-outfit text-gray-600 rounded-xl shadow-lg">
                 There is no trailer or poster!
               </div>
             )}
         </div>
         <div className="w-[100%] mt-8 text-2xl font-outfit font-semibold whitespace-break-spaces text-primary-black">
-          {movie?.title}
+          {show?.name}
         </div>
         <div className="w-[100%] h-auto grid grid-cols-[250px_1fr] bg-white rounded-xl  border-2 mt-5 items-center sm:flex sm:flex-col">
           <div className="">
-            {movie?.poster_path ? (
+            {show?.poster_path ? (
               <img
-                src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                src={`https://image.tmdb.org/t/p/w500/${show.poster_path}`}
                 className="h-[300px] rounded-xl shadow-lg"
               />
             ) : (
@@ -118,13 +119,13 @@ function Show() {
             <div className="h-[auto] text-lg font-outfit font-light">
               <p className="mb-3 font-semibold">The plot</p>
 
-              {movie?.overview}
+              {show?.overview}
             </div>
             <div className="h-[auto] flex flex-row gap-2 font-semibold font-outfit">
               <p>{year ? year : "No data"} • </p>
-              <p>{movie?.runtime ? movie.runtime + " min" : "No data"} • </p>
+              <p>{show?.runtime ? show.runtime + " min" : "No data"} • </p>
               <p>
-                {movie?.genres?.[0].name ? movie?.genres?.[0].name : "No data"}
+                {show?.genres?.[0].name ? show?.genres?.[0].name : "No data"}
               </p>
             </div>
           </div>
@@ -132,19 +133,19 @@ function Show() {
         <div className="w-[100%] mt-3">
           <p className="text-2xl font-outfit font-semibold">Cast</p>
           <div className="flex flex-row w-[100%]  sm:grid sm:grid-cols-3 us:grid-cols-2">
-            {movie?.cast &&
-              movie.cast.map((cast: Cast) => <ActorCard actor={cast} />)}
+            {show?.cast &&
+              show.cast.map((cast: Cast) => <ActorCard actor={cast} />)}
           </div>
         </div>
-        <div className="w-[100%] mt-3">
+        {/* <div className="w-[100%] mt-3">
           <p className="text-2xl font-outfit font-semibold">Recommended</p>
           <div className="flex flex-row w-[100%] justify-between sm:grid sm:grid-cols-3 us:grid-cols-2 mt-2">
-            {movie?.recommended &&
-              movie.recommended.map((movie: any) => (
+            {show?.recommended &&
+              show.recommended.map((movie: any) => (
                 <RecommendedMovie movie={movie} />
               ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
