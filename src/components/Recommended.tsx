@@ -6,7 +6,7 @@ type RecommendedMovies = {
   type: "movie" | "show";
 };
 
-function RecommendedMovies({ object, type }: RecommendedMovies) {
+function Recommended({ object, type }: RecommendedMovies) {
   return (
     <div className="w-[100%] mt-3">
       <p className="text-2xl font-outfit font-semibold">Recommended</p>
@@ -20,4 +20,4 @@ function RecommendedMovies({ object, type }: RecommendedMovies) {
   );
 }
 
-export default RecommendedMovies;
+export default Recommended;
