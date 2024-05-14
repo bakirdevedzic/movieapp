@@ -11,7 +11,9 @@ function ActorsComponent({ object }: ActorsComponentProps) {
       <p className="text-2xl font-outfit font-semibold">Cast</p>
       <div className="flex flex-row w-[100%]  sm:grid sm:grid-cols-3 us:grid-cols-2">
         {object?.cast &&
-          object.cast.map((cast: Cast) => <ActorCard actor={cast} />)}
+          object.cast.map((cast: Cast) => (
+            <ActorCard actor={cast} key={cast.id} />
+          ))}
       </div>
     </div>
   );

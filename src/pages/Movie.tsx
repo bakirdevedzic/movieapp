@@ -8,26 +8,58 @@ import ActorsComponent from "../components/ActorsComponent";
 import RecommendedMovies from "../components/Recommended";
 import NavigationButtons from "../components/NavigationButtons";
 import { useFetchMovieData } from "../hooks/useFetchMovieData";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import PageNotFound from "./PageNotFound";
 import { useDispatch } from "react-redux";
+import Button from "../ui/Button";
+import ButtonFull from "../ui/ButtonFull";
+import {
+  deleteMovie,
+  isMovieInStorage,
+  saveMovie,
+} from "../utils/localStorageHelper";
 
 function Movie() {
   let { id } = useParams();
-  const movie = useSelector<any, any>((state) => state.movie.currentMovie);
-
-  const error = useSelector<any, any>((state) => state.movie.error);
   if (!id) id = "";
   const { loading, idError } = useFetchMovieData(id);
 
+  const error = useSelector<any, any>((state) => state.movie.error);
+
+  const movie = useSelector<any, any>((state) => state.movie.currentMovie);
+
+  const [saved, setSaved] = useState(() => {
+    if (movie) {
+      return isMovieInStorage(movie.id);
+    } else {
+      return 0;
+    }
+  });
+
+  function handleSave() {
+    saveMovie(movie);
+    setSaved(true);
+  }
+  function handleDeleteSave() {
+    deleteMovie(movie.id);
+    setSaved(false);
+  }
+
   if (error || idError) return <PageNotFound />;
   if (loading) return <MovieSkeleton />;
-
   return (
     <div className="flex flex-col justify-center items-center bg-gray-50">
       <Header />
       <div className="max-w-[1300px] w-[100%] flex flex-col gap-3  p-4 items-center min-h-screen ">
-        <NavigationButtons />
+        <div className="flex flex-row  w-[100%] us:flex-col us:gap-2">
+          <NavigationButtons />
+          {saved ? (
+            <ButtonFull onClick={handleDeleteSave} text="Remove from saved!" />
+          ) : (
+            <ButtonFull onClick={handleSave} text="Save movie" />
+          )}
+        </div>
+
         <Banner object={movie} />
         <div className="w-[100%] mt-8 text-2xl font-outfit font-semibold whitespace-break-spaces text-primary-black">
           {movie?.title ? movie.title : "No data"}

@@ -21,6 +21,12 @@ import RecommendedMovies from "../components/Recommended";
 import NavigationButtons from "../components/NavigationButtons";
 import { useFetchShowData } from "../hooks/useFetchShowData";
 import PageNotFound from "./PageNotFound";
+import {
+  deleteShow,
+  isShowInStorage,
+  saveShow,
+} from "../utils/localStorageHelper";
+import ButtonFull from "../ui/ButtonFull";
 
 function Show() {
   let { id } = useParams();
@@ -30,6 +36,23 @@ function Show() {
   const show = useSelector<any, any>((state) => state.show.currentShow);
   const error = useSelector<any, any>((state) => state.show.error);
 
+  const [saved, setSaved] = useState(() => {
+    if (show) {
+      return isShowInStorage(show.id);
+    } else {
+      return 0;
+    }
+  });
+
+  function handleSave() {
+    saveShow(show);
+    setSaved(true);
+  }
+  function handleDeleteSave() {
+    deleteShow(show.id);
+    setSaved(false);
+  }
+
   if (error || idError) return <PageNotFound />;
   if (loading) return <MovieSkeleton />;
 
@@ -37,7 +60,14 @@ function Show() {
     <div className="flex flex-col justify-center items-center bg-gray-50">
       <Header />
       <div className="max-w-[1300px] w-[100%] flex flex-col gap-3  p-4 items-center min-h-screen ">
-        <NavigationButtons />
+        <div className="flex flex-row  w-[100%] us:flex-col us:gap-2">
+          <NavigationButtons />
+          {saved ? (
+            <ButtonFull onClick={handleDeleteSave} text="Remove from saved!" />
+          ) : (
+            <ButtonFull onClick={handleSave} text="Save show" />
+          )}
+        </div>
         <Banner object={show} />
         <div className="w-[100%] mt-8 text-2xl font-outfit font-semibold whitespace-break-spaces text-primary-black">
           {show?.name ? show?.name : "No name available!"}
