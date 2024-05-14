@@ -58,6 +58,7 @@ function Card(props: CardProps) {
   const dispatch = useDispatch();
   const handleClick = () => {
     navigate(`/${typeOfCard}/${id}`);
+
     dispatch(
       changeSearch({ search: props.state.search, tab: props.state.tab })
     );

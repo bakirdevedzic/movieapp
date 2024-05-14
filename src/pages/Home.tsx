@@ -2,14 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { AppDispatch } from "../store";
-import {
-  fetchMoviesBySearchAsync,
-  fetchTopMoviesAsync,
-} from "../redux/movieSlice";
-import {
-  fetchShowsBySearchAsync,
-  fetchTopShowsAsync,
-} from "../redux/showSlice";
+
 import { useNavigate } from "react-router-dom";
 import { changeSearch } from "../redux/searchSlice";
 import Tab from "../ui/Tab";
@@ -19,51 +12,19 @@ import { Movie, Show } from "../types/types";
 import LoadingMovies from "../components/LoadingMovies";
 import Header from "../ui/Header";
 import ButtonFull from "../ui/ButtonFull";
+import useSearchData from "../hooks/useSearchData";
 
 function Home() {
-  const searchState = useSelector<any, any>((state) => state.search.search);
   const tabState = useSelector<any, any>((state) => state.search.tab);
-  const [search, setSearch] = useState(searchState ? searchState : "");
   const [tab, setTab] = useState(tabState ? tabState : "show");
   const dispatch = useDispatch<AppDispatch>();
   const topMovies = useSelector<any, any>((state) => state.movie.topMovies);
   const topShows = useSelector<any, any>((state) => state.show.topShows);
 
+  const { search, setSearch, loading } = useSearchData();
+
   const moviesStatus = useSelector<any, any>((state) => state.movie.status);
   const showsStatus = useSelector<any, any>((state) => state.show.status);
-  useEffect(() => {
-    dispatch(fetchTopMoviesAsync());
-    dispatch(fetchTopShowsAsync());
-  }, [dispatch]);
-
-  const [loading, setLoading] = useState(false);
-
-  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  useEffect(() => {
-    if (search.length > 2) {
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
-      }
-      setLoading(true);
-      searchTimeoutRef.current = setTimeout(() => {
-        dispatch(fetchMoviesBySearchAsync(search));
-        dispatch(fetchShowsBySearchAsync(search));
-        setLoading(false);
-      }, 1000);
-    } else {
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
-        searchTimeoutRef.current = null;
-        setLoading(false);
-      }
-    }
-
-    return () => {
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
-      }
-    };
-  }, [search]);
 
   const fetchedMovies = useSelector<any, any>(
     (state) => state.movie.fetchedMovies

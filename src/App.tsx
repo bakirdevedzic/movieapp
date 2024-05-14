@@ -1,11 +1,6 @@
 import React, { useEffect } from "react";
 import PageNotFound from "./pages/PageNotFound";
-import {
-  BrowserRouter,
-  Route,
-  Routes,
-  ScrollRestoration,
-} from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 
 import { useDispatch } from "react-redux";
@@ -19,6 +14,11 @@ import ScrollToTop from "./components/ScrollToTop";
 import Library from "./pages/Library";
 
 function App() {
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    dispatch(fetchTopMoviesAsync());
+    dispatch(fetchTopShowsAsync());
+  }, [dispatch]);
   return (
     <BrowserRouter>
       <ScrollToTop />
