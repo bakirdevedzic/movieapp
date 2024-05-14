@@ -18,6 +18,7 @@ import Card from "../components/Card";
 import { Movie, Show } from "../types/types";
 import LoadingMovies from "../components/LoadingMovies";
 import Header from "../ui/Header";
+import ButtonFull from "../ui/ButtonFull";
 
 function Home() {
   const searchState = useSelector<any, any>((state) => state.search.search);
@@ -71,22 +72,29 @@ function Home() {
     (state) => state.show.fetchedShows
   );
   const navigate = useNavigate();
+  function seeLibrary() {
+    dispatch(changeSearch({ search: "", tab: "movie" }));
+    navigate("/library/all");
+  }
 
   return (
     <div className="flex flex-col justify-center items-center bg-gray-50">
       <Header />
       <div className="max-w-[1400px] w-[100%] flex flex-col gap-3  p-4 items-center min-h-screen">
-        <div className="flex flex-row gap-0 w-[100%]">
-          <Tab
-            onClick={() => setTab("movie")}
-            text={"Movies"}
-            active={tab === "movie" ? true : false}
-          />
-          <Tab
-            onClick={() => setTab("show")}
-            text={"TV Shows"}
-            active={tab === "show" ? true : false}
-          />
+        <div className="flex flex-row w-[100%] us:flex-col us:gap-2 justify-between">
+          <div className="flex flex-row gap-0 us:justify-center ">
+            <Tab
+              onClick={() => setTab("movie")}
+              text={"Movies"}
+              active={tab === "movie" ? true : false}
+            />
+            <Tab
+              onClick={() => setTab("show")}
+              text={"TV Shows"}
+              active={tab === "show" ? true : false}
+            />
+          </div>
+          <ButtonFull text="Your Library" onClick={seeLibrary} />
         </div>
 
         <Search onChange={(e) => setSearch(e.target.value)} value={search} />

@@ -16,6 +16,7 @@ import Movie from "./pages/Movie";
 import Show from "./pages/Show";
 
 import ScrollToTop from "./components/ScrollToTop";
+import Library from "./pages/Library";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/movie/:id" element={<Movie />} />
         <Route path="/show/:id" element={<Show />} />
         <Route path="*" element={<PageNotFound />} />
+        <Route path="library/:type" element={<Library />} />
       </Routes>
     </BrowserRouter>
   );

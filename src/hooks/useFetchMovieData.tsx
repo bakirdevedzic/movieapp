@@ -7,11 +7,13 @@ import {
   fetchTrailerKeyAsync,
 } from "../redux/movieSlice";
 import { AppDispatch } from "../store";
+import { useSelector } from "react-redux";
 
 export const useFetchMovieData = (id: string) => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch<AppDispatch>();
   const [idError, setIdError] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
@@ -25,7 +27,6 @@ export const useFetchMovieData = (id: string) => {
             await dispatch(fetchMovieCreditsAsync(numericId));
             await dispatch(fetchRecommendedMovies(numericId));
           } catch (error) {
-            return;
           } finally {
             setLoading(false);
           }

@@ -36,13 +36,14 @@ function Show() {
   const show = useSelector<any, any>((state) => state.show.currentShow);
   const error = useSelector<any, any>((state) => state.show.error);
 
-  const [saved, setSaved] = useState(() => {
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
     if (show) {
-      return isShowInStorage(show.id);
-    } else {
-      return 0;
+      const isMovieSaved = isShowInStorage(show.id);
+      setSaved(isMovieSaved);
     }
-  });
+  }, [show]);
 
   function handleSave() {
     saveShow(show);

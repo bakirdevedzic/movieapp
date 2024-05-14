@@ -8,7 +8,7 @@ import ActorsComponent from "../components/ActorsComponent";
 import RecommendedMovies from "../components/Recommended";
 import NavigationButtons from "../components/NavigationButtons";
 import { useFetchMovieData } from "../hooks/useFetchMovieData";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import PageNotFound from "./PageNotFound";
 import { useDispatch } from "react-redux";
 import Button from "../ui/Button";
@@ -28,13 +28,14 @@ function Movie() {
 
   const movie = useSelector<any, any>((state) => state.movie.currentMovie);
 
-  const [saved, setSaved] = useState(() => {
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
     if (movie) {
-      return isMovieInStorage(movie.id);
-    } else {
-      return 0;
+      const isMovieSaved = isMovieInStorage(movie.id);
+      setSaved(isMovieSaved);
     }
-  });
+  }, [movie]);
 
   function handleSave() {
     saveMovie(movie);

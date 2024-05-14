@@ -50,18 +50,21 @@ export function deleteShow(showId: number) {
   setSavedShows(savedShows);
 }
 
-export function isMovieInStorage(movieId: number): boolean {
+export function isMovieInStorage(movieId: number) {
   const savedMovies = getSavedMovies();
   const movieIndex = savedMovies.findIndex(
     (movie: Movie) => movie.id === movieId
   );
-  return movieIndex !== -1;
+
+  if (movieIndex === -1) return false;
+  return true;
 }
 
-export function isShowInStorage(showId: number): boolean {
+export function isShowInStorage(showId: number) {
   const savedShows = getSavedShows();
   const showIndex = savedShows.findIndex((show: Show) => show.id === showId);
-  return showIndex !== -1;
+  if (showIndex === -1) return false;
+  return true;
 }
 
 export {};
