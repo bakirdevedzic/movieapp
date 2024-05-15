@@ -22,10 +22,16 @@ function RecommendedMovie({ object, type }: RecommendedMovieProps) {
       onClick={() => navigate(`/${type}/${object?.id}`)}
     >
       <div className="w-[100%] h-[100%]">
-        <img
-          src={`https://image.tmdb.org/t/p/w500${object?.poster_path}`}
-          className="object-cover w-[100%] h-[100%] rounded-xl"
-        />
+        {object?.poster_path ? (
+          <img
+            src={`https://image.tmdb.org/t/p/w500${object.poster_path}`}
+            className="object-cover w-[100%] h-[100%] rounded-xl"
+          />
+        ) : (
+          <div className="w-[100%] h-[200px] flex justify-center items-center font-bold font-outfit text-gray-600 rounded-xl shadow-lg">
+            No poster available!
+          </div>
+        )}
       </div>
       <div className="text-normal font-outfit font-light p-1 whitespace-normal">
         <p>{object?.title}</p>
