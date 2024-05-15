@@ -34,7 +34,7 @@ function Home() {
   );
   const navigate = useNavigate();
   function seeLibrary() {
-    dispatch(changeSearch({ search: "", tab: "movie" }));
+    dispatch(changeSearch({ search: search, tab: tab }));
     navigate("/library/all");
   }
 
