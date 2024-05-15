@@ -2,8 +2,6 @@
 
 This project is a React movie app that allows users to search for movies and TV shows, view details, and save them to a personalized library.
 
-**LIVE**: [https://movie-and-shows-app.netlify.app/](https://movie-and-shows-app.netlify.app/)
-
 ## Technologies:
 
 - React
@@ -28,6 +26,14 @@ This project is a React movie app that allows users to search for movies and TV 
 1.  Clone this repository or download the project files.
 2.  Install dependencies using npm or yarn:
     `npm install`
+
+**Setting Up an API Key**
+
+1. Visit the OMDB API website: https://www.omdbapi.com/ and get your API Key
+
+2. A file named `.env.example` is provided as a template for your convenience. You can copy this file and rename it to `.env`
+
+3. Add the API Key to the `.env` File
 
 **Development:**
 
