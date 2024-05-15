@@ -1,4 +1,3 @@
-import YouTube from "react-youtube";
 import { Movie, Show } from "../types/types";
 
 type BannerProps = {
@@ -9,14 +8,13 @@ function Banner({ object }: BannerProps) {
   return (
     <div className="w-[100%]">
       {object?.trailer && object.trailer !== "" && (
-        <YouTube
-          videoId={object?.trailer}
-          opts={{
-            width: "100%",
-            playerVars: { autoplay: 0 },
-          }}
-          iframeClassName="rounded-lg"
-        />
+        <div className="flex justify-center items-center">
+          <iframe
+            src={`https://www.youtube.com/embed/${object?.trailer}`}
+            className="w-[75%] sm:w-[100%] us:w-[100%]  aspect-video rounded-lg"
+            allowFullScreen
+          />
+        </div>
       )}
       {object?.backdrop_path !== null && object?.trailer === "" && (
         <img
