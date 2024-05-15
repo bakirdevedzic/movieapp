@@ -3,6 +3,7 @@ import { Movie, Show } from "../types/types";
 import { MdOutlineStar } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { changeSearch } from "../redux/searchSlice";
+import { AppDispatch } from "../store";
 
 type State = {
   search: string;
@@ -55,7 +56,7 @@ function Card(props: CardProps) {
       ? overview?.slice(0, 140) + "..."
       : overview;
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const handleClick = () => {
     navigate(`/${typeOfCard}/${id}`);
 
