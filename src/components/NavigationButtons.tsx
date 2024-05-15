@@ -8,8 +8,8 @@ function NavigationButtons() {
   return (
     <div className="flex flex-row gap-2 w-[100%]">
       <div className="flex flex-row gap-2 w-[100%]">
-        <Button onClick={() => navigate(-1)} text="Go back!" />
-        <Button onClick={() => navigate(`/`)} text="Home!" />
+        <Button onClick={() => navigate(-1)} text="Go back" />
+        <Button onClick={() => navigate(`/`)} text="Home" />
       </div>
     </div>
   );
