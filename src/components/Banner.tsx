@@ -17,11 +17,13 @@ function Banner({ object }: BannerProps) {
         </div>
       )}
       {object?.backdrop_path !== null && object?.trailer === "" && (
-        <img
-          src={`https://image.tmdb.org/t/p/w500/${object.backdrop_path}`}
-          alt={"Poster"}
-          className="min-w-[100%] object-fit rounded-xl shadow-lg"
-        />
+        <div className="flex justify-center items-center">
+          <img
+            src={`https://image.tmdb.org/t/p/w500/${object.backdrop_path}`}
+            alt={"Poster"}
+            className="min-w-[75%] object-fit rounded-xl shadow-lg"
+          />
+        </div>
       )}
       {object?.backdrop_path === null && object?.trailer === "" && (
         <div className="w-[100%] h-[400px] flex justify-center items-center font-bold font-outfit text-gray-600 rounded-xl shadow-lg border">
