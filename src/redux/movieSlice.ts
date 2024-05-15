@@ -7,7 +7,7 @@ import {
 import axios from "axios";
 import { getTrailerKeyFromResponse } from "../utils/helpers";
 
-const API_KEY = "20ed5b330941aa4c2592b1af5b8ca46e";
+const API_KEY: string | undefined = process.env.REACT_APP_API_KEY;
 
 export const fetchTopMoviesAsync = createAsyncThunk<
   Movie[],
