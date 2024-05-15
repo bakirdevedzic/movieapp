@@ -2,7 +2,7 @@
 
 This project is a React movie app that allows users to search for movies and TV shows, view details, and save them to a personalized library.
 
-**LIVE**: [[(https://movie-and-shows-app.netlify.app/)](https://movie-and-shows-app.netlify.app/)]
+**LIVE**: [(https://movie-and-shows-app.netlify.app/)](https://movie-and-shows-app.netlify.app/)
 
 ## Technologies:
 
