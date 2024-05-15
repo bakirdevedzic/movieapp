@@ -7,7 +7,7 @@ export type Movie = {
   overview: string | "";
   trailer: string;
   cast: Cast[];
-  backdrop_path: string;
+  backdrop_path: string | null;
   recommended: Movie[];
   runtime: number;
   genres: any;
@@ -16,7 +16,7 @@ export type Movie = {
 export type Cast = {
   id: number;
   name: string;
-  profile_path: string;
+  profile_path: string | null;
   character: string;
 };
 
@@ -31,7 +31,7 @@ export type initialMovieStateType = {
 export type Show = {
   id: number;
   name: string;
-  first_air_date: number;
+  first_air_date: string;
   vote_average: number;
   poster_path: string;
   overview: string | "";
